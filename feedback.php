@@ -5,56 +5,66 @@ if(!isset($_SESSION['username'])){
     exit();
 }
 
-// Get user type for conditional display
-$userType = $_SESSION['user_type'];
-
 include 'connect.php';
 
-// Create feedback table if it doesn't exist
-$createTable = "CREATE TABLE IF NOT EXISTS feedback (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id VARCHAR(100) NOT NULL,
-    username VARCHAR(100) NOT NULL,
-    subject VARCHAR(255) NOT NULL,
-    message TEXT NOT NULL,
-    status ENUM('pending', 'read', 'responded') DEFAULT 'pending',
-    date_submitted DATETIME NOT NULL,
-    admin_response TEXT,
-    date_responded DATETIME
-)";
-
-if($conn->query($createTable) !== TRUE) {
-    $error = "Error creating feedback table: " . $conn->error;
-}
-
-// Handle form submission
-if(isset($_POST['submit_feedback'])) {
-    $subject = $conn->real_escape_string($_POST['subject']);
-    $message = $conn->real_escape_string($_POST['message']);
-    $date = date('Y-m-d H:i:s');
-    $username = $_SESSION['username'];
-    $userId = isset($_SESSION['idNo']) ? $_SESSION['idNo'] : '';
+// Process feedback from history page
+if(isset($_POST['sitin_id']) && isset($_POST['rating'])) {
+    $sitinId = (int)$_POST['sitin_id'];
+    $rating = (int)$_POST['rating'];
+    $comments = isset($_POST['comments']) ? $conn->real_escape_string($_POST['comments']) : '';
+    $date = date('Y-m-d'); // Use just the date as per your table structure
     
-    // Insert the feedback
-    $sql = "INSERT INTO feedback (user_id, username, subject, message, date_submitted) 
-            VALUES (?, ?, ?, ?, ?)";
+    // Verify the sitin record exists and belongs to this user
+    $username = $_SESSION['username'];
+    $verifyQuery = "SELECT ns.id FROM new_sitin ns 
+                   JOIN users u ON ns.user_id = u.id 
+                   WHERE ns.id = ? AND u.username = ?";
+    $stmt = $conn->prepare($verifyQuery);
+    $stmt->bind_param("is", $sitinId, $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
+    if($result->num_rows === 0) {
+        $_SESSION['feedback_error'] = "You don't have permission to submit feedback for this session.";
+        header("Location: history.php");
+        exit();
+    }
+    
+    // Check if feedback already exists for this sit-in session
+    $checkQuery = "SELECT id FROM feedback WHERE sitin_id = ?";
+    $stmt = $conn->prepare($checkQuery);
+    $stmt->bind_param("i", $sitinId);
+    $stmt->execute();
+    $checkResult = $stmt->get_result();
+    
+    if($checkResult->num_rows > 0) {
+        $_SESSION['feedback_error'] = "You have already submitted feedback for this session.";
+        header("Location: history.php");
+        exit();
+    }
+    
+    // Insert the feedback - using only the fields that exist in your database
+    $sql = "INSERT INTO feedback (sitin_id, rating, comments, date_submitted) VALUES (?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sssss", $userId, $username, $subject, $message, $date);
+    $stmt->bind_param("iiss", $sitinId, $rating, $comments, $date);
     
     if($stmt->execute()) {
-        $success = "Your feedback has been submitted successfully!";
+        $_SESSION['feedback_success'] = "Your feedback has been submitted successfully!";
     } else {
-        $error = "Error submitting feedback: " . $conn->error;
+        $_SESSION['feedback_error'] = "Error submitting feedback: " . $conn->error;
     }
+    
+    header("Location: history.php");
+    exit();
 }
 
-// Get user's previous feedback
-$username = $_SESSION['username'];
-$sql = "SELECT * FROM feedback WHERE username = ? ORDER BY date_submitted DESC";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $username);
-$stmt->execute();
-$result = $stmt->get_result();
+// If this is a regular feedback page request (not from history.php), 
+// show the regular feedback page
+
+// Get user type for conditional display
+$userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : '';
+
+// ... existing code for the feedback page display ...
 ?>
 
 <!DOCTYPE html>

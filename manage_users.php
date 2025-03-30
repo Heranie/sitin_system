@@ -190,6 +190,7 @@ $fullSessions = $fullSessionsResult->fetch_assoc()['count'];
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="js/particles.js" defer></script>
     <script>
         tailwind.config = {
             theme: {
@@ -206,50 +207,141 @@ $fullSessions = $fullSessionsResult->fetch_assoc()['count'];
         }
     </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
-        
         body {
-            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
-            background-attachment: fixed;
-        }
-        
-        /* Glassmorphism */
-        .glass {
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            background: #000000;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            font-family: 'Roboto', sans-serif;
+            overflow-x: hidden;
         }
 
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
+        /* Header style */
+        .header {
+            background: linear-gradient(to right, rgba(29, 59, 42, 0.9), rgba(60, 46, 38, 0.9));
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(166, 124, 82, 0.2);
         }
-        
-        ::-webkit-scrollbar-track {
+
+        /* Sidebar style */
+        .sidebar {
+            background: rgba(0, 0, 0, 0.8);
+            border-right: 1px solid rgba(166, 124, 82, 0.2);
+        }
+
+        /* Card and container styles */
+        .glass {
             background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(237, 238, 245, 0.37);
         }
-        
-        ::-webkit-scrollbar-thumb {
-            background: rgba(178, 166, 204, 0.5);
-            border-radius: 4px;
+
+        .dash-card {
+            background: linear-gradient(135deg, rgba(29, 59, 42, 0.4), rgba(60, 46, 38, 0.4));
+            border: 1px solid rgba(166, 124, 82, 0.2);
         }
-        
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(178, 166, 204, 0.8);
+
+        .dash-card:hover {
+            background: linear-gradient(135deg, rgba(29, 59, 42, 0.6), rgba(60, 46, 38, 0.6));
+            border: 1px solid rgba(166, 124, 82, 0.3);
+        }
+
+        /* Text colors */
+        .text-gray-600 {
+            color: rgba(166, 124, 82, 0.8) !important;
+        }
+
+        .text-gray-800 {
+            color: rgba(255, 255, 255, 0.9) !important;
+        }
+
+        /* Icon and button styles */
+        .icon-container {
+            background: linear-gradient(135deg, rgba(29, 59, 42, 0.4), rgba(60, 46, 38, 0.4));
+            color: #A67C52;
+            border: 1px solid rgba(166, 124, 82, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .icon-container:hover {
+            background: linear-gradient(135deg, rgba(29, 59, 42, 0.6), rgba(60, 46, 38, 0.6));
+            border-color: rgba(166, 124, 82, 0.4);
+        }
+
+        /* Form button styles */
+        button[type="submit"], 
+        #addUserBtn,
+        .action-btn {
+            background: linear-gradient(135deg, #1D3B2A, #3C2E26) !important;
+            color: #A67C52 !important;
+            border: 1px solid rgba(166, 124, 82, 0.3) !important;
+            transition: all 0.3s ease;
+        }
+
+        button[type="submit"]:hover,
+        #addUserBtn:hover,
+        .action-btn:hover {
+            background: linear-gradient(135deg, #3C2E26, #1D3B2A) !important;
+            border-color: rgba(166, 124, 82, 0.5) !important;
+            transform: translateY(-1px);
+        }
+
+        /* Stats card icons */
+        .stats-icon {
+            color: #A67C52 !important;
+            background: linear-gradient(135deg, rgba(29, 59, 42, 0.4), rgba(60, 46, 38, 0.4));
+        }
+
+        /* Icon colors - Updated all icons to match */
+        i,
+        .fa-tachometer-alt,
+        .fa-search,
+        .fa-chair,
+        .fa-history,
+        .fa-chart-bar,
+        .fa-users,
+        .fa-sign-out-alt,
+        .fa-sync-alt,
+        .fa-edit,
+        .fa-trash-alt,
+        .fa-check-circle,
+        .fa-exclamation-circle,
+        .fa-info-circle,
+        .fa-times,
+        .fa-user-plus,
+        .fa-user-graduate,
+        .fa-user-clock,
+        .fa-user-slash {
+            color: #A67C52 !important;
+            transition: all 0.3s ease;
+        }
+
+        /* Hover state for sidebar icons */
+        .sidebar ul li a:hover i {
+            color: #B4B0D5 !important;
+        }
+
+        .sidebar ul li a.active i {
+            color: #A67C52 !important;
+        }
+
+        .sidebar .text-primary-dark {
+            color: #B4B0D5 !important;
         }
     </style>
 </head>
 <body class="font-sans text-gray-800 min-h-screen">
     <!-- Header -->
-    <div class="fixed top-0 left-0 right-0 bg-gradient-to-r from-[rgba(178,166,204,0.7)] to-[rgba(217,230,255,0.7)] backdrop-blur-lg z-50 border-b border-white/20 py-2 px-6">
+    <div class="fixed top-0 left-0 right-0 header backdrop-blur-lg z-50 border-b border-white/20 py-2 px-6">
         <h1 class="text-xl md:text-2xl font-bold text-center">Manage Users</h1>
     </div>
     
-    <!-- Sidebar -->
-    <div class="fixed top-0 left-0 bottom-0 w-64 glass border-r border-white/20 pt-16 z-40 overflow-y-auto">
+        <!-- Sidebar -->
+        <div class="fixed top-0 left-0 bottom-0 w-64 glass border-r border-white/20 pt-16 z-40 overflow-y-auto no-print">
         <div class="flex flex-col items-center p-5 mb-5 border-b border-white/30">
             <img src="images/admin_icon.jpg" alt="Admin Profile" class="w-20 h-20 rounded-full object-cover border-3 border-white/50 mb-3">
             <div class="font-semibold text-center"><?php echo $_SESSION['username']; ?></div>
@@ -267,16 +359,13 @@ $fullSessions = $fullSessionsResult->fetch_assoc()['count'];
                 <i class="fas fa-chair w-6"></i> <span>Current Sit-In</span>
             </a></li>
             <li class="mb-1"><a href="manage_history.php" class="flex items-center py-2 px-4 rounded hover:bg-white/20 transition-colors">
-                <i class="fas fa-history w-6"></i> <span>History Sit-In</span>
+                <i class="fas fa-history w-6"></i> <span>Sit-In Records</span>
             </a></li>
-            <li class="mb-1"><a href="manage_users.php" class="flex items-center py-2 px-4 rounded bg-white/30 text-primary-dark font-semibold">
+            <li class="mb-1"><a href="reports.php" class="flex items-center py-2 px-4 rounded hover:bg-white/20 transition-colors">
+                <i class="fas fa-chart-bar w-6"></i> <span>Reports</span>
+            </a></li>
+            <li class="mb-1"><a href="manage_users.php" class="flex items-center py-2 px-4 rounded hover:bg-white/20 transition-colors">
                 <i class="fas fa-users w-6"></i> <span>Manage Users</span>
-            </a></li>
-            <li class="mb-1"><a href="manage_feedback.php" class="flex items-center py-2 px-4 rounded hover:bg-white/20 transition-colors">
-                <i class="fas fa-comment w-6"></i> <span>Feedback</span>
-            </a></li>
-            <li class="mb-1"><a href="#" class="flex items-center py-2 px-4 rounded hover:bg-white/20 transition-colors">
-                <i class="fas fa-cog w-6"></i> <span>Settings</span>
             </a></li>
             <li class="mb-1"><a href="logout.php" class="flex items-center py-2 px-4 rounded hover:bg-white/20 transition-colors">
                 <i class="fas fa-sign-out-alt w-6"></i> <span>Log Out</span>
@@ -312,8 +401,8 @@ $fullSessions = $fullSessionsResult->fetch_assoc()['count'];
             <!-- Total Students Card -->
             <div class="glass p-5 rounded-lg">
                 <div class="flex items-center">
-                    <div class="rounded-full bg-purple-100/50 p-4 mr-4">
-                        <i class="fas fa-user-graduate text-purple-600 text-xl"></i>
+                    <div class="rounded-full stats-icon p-4 mr-4">
+                        <i class="fas fa-user-graduate text-xl"></i>
                     </div>
                     <div>
                         <p class="text-xl font-bold"><?php echo $totalStudents; ?></p>
@@ -325,8 +414,8 @@ $fullSessions = $fullSessionsResult->fetch_assoc()['count'];
             <!-- Active Students Card -->
             <div class="glass p-5 rounded-lg">
                 <div class="flex items-center">
-                    <div class="rounded-full bg-green-100/50 p-4 mr-4">
-                        <i class="fas fa-user-clock text-green-600 text-xl"></i>
+                    <div class="rounded-full stats-icon p-4 mr-4">
+                        <i class="fas fa-user-clock text-xl"></i>
                     </div>
                     <div>
                         <p class="text-xl font-bold"><?php echo $activeStudents; ?></p>
@@ -338,8 +427,8 @@ $fullSessions = $fullSessionsResult->fetch_assoc()['count'];
             <!-- Session Used Up Card -->
             <div class="glass p-5 rounded-lg">
                 <div class="flex items-center">
-                    <div class="rounded-full bg-red-100/50 p-4 mr-4">
-                        <i class="fas fa-user-slash text-red-600 text-xl"></i>
+                    <div class="rounded-full stats-icon p-4 mr-4">
+                        <i class="fas fa-user-slash text-xl"></i>
                     </div>
                     <div>
                         <p class="text-xl font-bold"><?php echo $fullSessions; ?></p>
@@ -354,11 +443,11 @@ $fullSessions = $fullSessionsResult->fetch_assoc()['count'];
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-xl font-bold">User Management</h2>
                 <div class="flex space-x-3">
-                    <button id="addUserBtn" class="bg-primary-dark hover:bg-primary text-white px-3 py-2 rounded-lg transition-colors flex items-center">
+                    <button id="addUserBtn" class="action-btn px-3 py-2 rounded-lg transition-colors flex items-center">
                         <i class="fas fa-user-plus mr-2"></i> Add User
                     </button>
                     <form method="POST" name="reset_all_sessions_form">
-                        <button type="submit" name="reset_all_sessions" class="bg-purple-600 hover:bg-purple-700 text-white px-3 py-2 rounded-lg transition-colors flex items-center">
+                        <button type="submit" name="reset_all_sessions" class="action-btn px-3 py-2 rounded-lg transition-colors flex items-center">
                             <i class="fas fa-sync-alt mr-2"></i> Reset All Sessions
                         </button>
                     </form>
@@ -409,19 +498,19 @@ $fullSessions = $fullSessionsResult->fetch_assoc()['count'];
                                 </td>
                                 <td class="p-3 text-right space-x-1">
                                     <button onclick="editUser(<?php echo htmlspecialchars(json_encode($row)); ?>)" 
-                                            class="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded">
+                                            class="action-btn px-2 py-1 rounded">
                                         <i class="fas fa-edit"></i>
                                     </button>
                                     
                                     <form method="POST" class="inline" name="reset_session_form">
                                         <input type="hidden" name="user_id" value="<?php echo $row['id']; ?>">
-                                        <button type="submit" name="reset_user_session" class="bg-purple-500 hover:bg-purple-600 text-white px-2 py-1 rounded">
+                                        <button type="submit" name="reset_user_session" class="action-btn px-2 py-1 rounded">
                                             <i class="fas fa-sync-alt"></i>
                                         </button>
                                     </form>
                                     
                                     <button onclick="deleteUser(<?php echo $row['id']; ?>, '<?php echo htmlspecialchars($row['firstName'] . ' ' . $row['lastName']); ?>')" 
-                                            class="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded">
+                                            class="action-btn px-2 py-1 rounded">
                                         <i class="fas fa-trash-alt"></i>
                                     </button>
                                 </td>
@@ -534,7 +623,7 @@ $fullSessions = $fullSessionsResult->fetch_assoc()['count'];
                     <button type="button" id="cancelAddBtn" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-lg mr-2">
                         Cancel
                     </button>
-                    <button type="submit" name="add_user" class="bg-primary-dark hover:bg-primary text-white px-4 py-2 rounded-lg">
+                    <button type="submit" name="add_user" class="action-btn px-4 py-2 rounded-lg">
                         Add User
                     </button>
                 </div>
@@ -635,7 +724,7 @@ $fullSessions = $fullSessionsResult->fetch_assoc()['count'];
                     <button type="button" id="cancelEditBtn" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-lg mr-2">
                         Cancel
                     </button>
-                    <button type="submit" name="edit_user" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg">
+                    <button type="submit" name="edit_user" class="action-btn px-4 py-2 rounded-lg">
                         Update User
                     </button>
                 </div>

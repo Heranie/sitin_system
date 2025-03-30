@@ -147,9 +147,7 @@ $avgMinutes = floor(($avgDuration % 3600) / 60);
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="js/particles.js" defer></script>
     <script>
         tailwind.config = {
             theme: {
@@ -166,84 +164,133 @@ $avgMinutes = floor(($avgDuration % 3600) / 60);
         }
     </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
-        
         body {
-            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
-            background-attachment: fixed;
-        }
-        
-        /* Glassmorphism */
-        .glass {
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            background: #000000;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            font-family: 'Roboto', sans-serif;
+            overflow-x: hidden;
         }
 
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
+        /* Header style */
+        .header {
+            background: linear-gradient(to right, rgba(29, 59, 42, 0.9), rgba(60, 46, 38, 0.9));
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(166, 124, 82, 0.2);
         }
-        
-        ::-webkit-scrollbar-track {
+
+        /* Sidebar style */
+        .sidebar {
+            background: rgba(0, 0, 0, 0.8);
+            border-right: 1px solid rgba(166, 124, 82, 0.2);
+        }
+
+        /* Update Sit-in History text color */
+        .sidebar ul li a.active span {
+            color: #ffffff !important;
+        }
+
+        .sidebar ul li a.active {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Card and container styles */
+        .glass {
             background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(237, 238, 245, 0.37);
         }
-        
-        ::-webkit-scrollbar-thumb {
-            background: rgba(178, 166, 204, 0.5);
-            border-radius: 4px;
+
+        /* Icon container styles */
+        .icon-container {
+            background: linear-gradient(135deg, rgba(29, 59, 42, 0.4), rgba(60, 46, 38, 0.4));
+            color: #A67C52;
+            border: 1px solid rgba(166, 124, 82, 0.2);
+            transition: all 0.3s ease;
         }
-        
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(178, 166, 204, 0.8);
+
+        .icon-container:hover {
+            background: linear-gradient(135deg, rgba(29, 59, 42, 0.6), rgba(60, 46, 38, 0.6));
+            border-color: rgba(166, 124, 82, 0.4);
         }
-        
-        /* Print styles */
-        @media print {
-            body {
-                background: white;
-                font-size: 12pt;
-            }
-            
-            .no-print {
-                display: none !important;
-            }
-            
-            .glass {
-                background: white;
-                box-shadow: none;
-                border: 1px solid #ddd;
-            }
-            
-            .page-container {
-                margin: 0;
-                padding: 0;
-            }
-            
-            table {
-                width: 100%;
-                border-collapse: collapse;
-            }
-            
-            th, td {
-                border: 1px solid #ddd;
-                padding: 8px;
-                text-align: left;
-            }
+
+        /* Icon colors */
+        .icon-primary {
+            color: #A67C52 !important;
+        }
+
+        /* Sidebar icon colors */
+        .sidebar i {
+            color: #A67C52;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar a:hover i {
+            color: #5A6B4D;
+        }
+
+        /* Text colors */
+        .text-gray-600 {
+            color: rgba(166, 124, 82, 0.8) !important;
+        }
+
+        .text-gray-800 {
+            color: #ffffff !important;
+        }
+
+        /* Button and action styles */
+        .action-btn {
+            background: linear-gradient(135deg, #1D3B2A, #3C2E26) !important;
+            color: #A67C52 !important;
+            border: 1px solid rgba(166, 124, 82, 0.3) !important;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: linear-gradient(135deg, #3C2E26, #1D3B2A) !important;
+            border-color: rgba(166, 124, 82, 0.5) !important;
+            transform: translateY(-1px);
+        }
+
+        /* Table styles */
+        table thead tr {
+            background: rgba(166, 124, 82, 0.1);
+        }
+
+        table tbody tr {
+            border-bottom: 1px solid rgba(166, 124, 82, 0.2);
+        }
+
+        table tbody tr:hover {
+            background: rgba(166, 124, 82, 0.05);
+        }
+
+        /* Stats card styles */
+        .stats-card {
+            background: linear-gradient(135deg, rgba(29, 59, 42, 0.4), rgba(60, 46, 38, 0.4));
+            border: 1px solid rgba(166, 124, 82, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(237, 238, 245, 0.37);
+        }
+
+        .stats-card:hover {
+            background: linear-gradient(135deg, rgba(29, 59, 42, 0.6), rgba(60, 46, 38, 0.6));
+            border: 1px solid rgba(151, 100, 50, 0.3);
         }
     </style>
 </head>
 <body class="font-sans text-gray-800 min-h-screen">
     <!-- Header -->
-    <div class="fixed top-0 left-0 right-0 bg-gradient-to-r from-[rgba(178,166,204,0.7)] to-[rgba(217,230,255,0.7)] backdrop-blur-lg z-50 border-b border-white/20 py-2 px-6 no-print">
-        <h1 class="text-xl md:text-2xl font-bold text-center">Sit-in History</h1>
+    <div class="fixed top-0 left-0 right-0 header z-50 py-2 px-6 no-print">
+        <h1 class="text-xl md:text-2xl font-bold text-center">Sit-in Records</h1>
     </div>
     
     <!-- Sidebar -->
-    <div class="fixed top-0 left-0 bottom-0 w-64 glass border-r border-white/20 pt-16 z-40 overflow-y-auto no-print">
+    <div class="fixed top-0 left-0 bottom-0 w-64 sidebar pt-16 z-40 overflow-y-auto no-print">
         <div class="flex flex-col items-center p-5 mb-5 border-b border-white/30">
             <img src="images/admin_icon.jpg" alt="Admin Profile" class="w-20 h-20 rounded-full object-cover border-3 border-white/50 mb-3">
             <div class="font-semibold text-center"><?php echo $_SESSION['username']; ?></div>
@@ -260,17 +307,14 @@ $avgMinutes = floor(($avgDuration % 3600) / 60);
             <li class="mb-1"><a href="manage_currsitin.php" class="flex items-center py-2 px-4 rounded hover:bg-white/20 transition-colors">
                 <i class="fas fa-chair w-6"></i> <span>Current Sit-In</span>
             </a></li>
-            <li class="mb-1"><a href="manage_history.php" class="flex items-center py-2 px-4 rounded bg-white/30 text-primary-dark font-semibold">
-                <i class="fas fa-history w-6"></i> <span>Sit-In History</span>
+            <li class="mb-1"><a href="manage_history.php" class="flex items-center py-2 px-4 rounded bg-white/30 text-primary-dark font-semibold active">
+                <i class="fas fa-history w-6"></i> <span>Sit-In Records</span>
+            </a></li>
+            <li class="mb-1"><a href="reports.php" class="flex items-center py-2 px-4 rounded hover:bg-white/20 transition-colors">
+                <i class="fas fa-chart-bar w-6"></i> <span>Reports</span>
             </a></li>
             <li class="mb-1"><a href="manage_users.php" class="flex items-center py-2 px-4 rounded hover:bg-white/20 transition-colors">
                 <i class="fas fa-users w-6"></i> <span>Manage Users</span>
-            </a></li>
-            <li class="mb-1"><a href="manage_feedback.php" class="flex items-center py-2 px-4 rounded hover:bg-white/20 transition-colors">
-                <i class="fas fa-comment w-6"></i> <span>Feedback</span>
-            </a></li>
-            <li class="mb-1"><a href="#" class="flex items-center py-2 px-4 rounded hover:bg-white/20 transition-colors">
-                <i class="fas fa-cog w-6"></i> <span>Settings</span>
             </a></li>
             <li class="mb-1"><a href="logout.php" class="flex items-center py-2 px-4 rounded hover:bg-white/20 transition-colors">
                 <i class="fas fa-sign-out-alt w-6"></i> <span>Log Out</span>
@@ -283,10 +327,10 @@ $avgMinutes = floor(($avgDuration % 3600) / 60);
         <!-- Stats Cards -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6 no-print">
             <!-- Total Sessions Card -->
-            <div class="glass p-5 rounded-lg">
+            <div class="stats-card p-5 rounded-lg">
                 <div class="flex items-center">
-                    <div class="rounded-full bg-purple-100/50 p-4 mr-4">
-                        <i class="fas fa-chart-line text-purple-600 text-xl"></i>
+                    <div class="icon-container rounded-full p-4 mr-4">
+                        <i class="fas fa-chart-line icon-primary text-xl"></i>
                     </div>
                     <div>
                         <p class="text-xl font-bold"><?php echo number_format($stats['total_sessions']); ?></p>
@@ -296,10 +340,10 @@ $avgMinutes = floor(($avgDuration % 3600) / 60);
             </div>
             
             <!-- Unique Users Card -->
-            <div class="glass p-5 rounded-lg">
+            <div class="stats-card p-5 rounded-lg">
                 <div class="flex items-center">
-                    <div class="rounded-full bg-blue-100/50 p-4 mr-4">
-                        <i class="fas fa-users text-blue-600 text-xl"></i>
+                    <div class="icon-container rounded-full p-4 mr-4">
+                        <i class="fas fa-users icon-primary text-xl"></i>
                     </div>
                     <div>
                         <p class="text-xl font-bold"><?php echo number_format($stats['unique_users']); ?></p>
@@ -309,10 +353,10 @@ $avgMinutes = floor(($avgDuration % 3600) / 60);
             </div>
             
             <!-- Average Duration Card -->
-            <div class="glass p-5 rounded-lg">
+            <div class="stats-card p-5 rounded-lg">
                 <div class="flex items-center">
-                    <div class="rounded-full bg-green-100/50 p-4 mr-4">
-                        <i class="fas fa-clock text-green-600 text-xl"></i>
+                    <div class="icon-container rounded-full p-4 mr-4">
+                        <i class="fas fa-clock icon-primary text-xl"></i>
                     </div>
                     <div>
                         <p class="text-xl font-bold"><?php echo $avgHours; ?>h <?php echo $avgMinutes; ?>m</p>
@@ -322,24 +366,11 @@ $avgMinutes = floor(($avgDuration % 3600) / 60);
             </div>
         </div>
         
-        <!-- Export Options -->
-        <div class="flex justify-between items-center mb-4 no-print">
-            <h2 class="text-xl font-bold">Sit-in History</h2>
-            
-            <div class="flex space-x-2">
-                <button id="printBtn" class="bg-gray-600 hover:bg-gray-700 text-white px-3 py-2 rounded-lg flex items-center">
-                    <i class="fas fa-print mr-2"></i> Print
-                </button>
-                <button id="pdfBtn" class="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-lg flex items-center">
-                    <i class="fas fa-file-pdf mr-2"></i> Export PDF
-                </button>
-                <button id="excelBtn" class="bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded-lg flex items-center">
-                    <i class="fas fa-file-excel mr-2"></i> Export Excel
-                </button>
-            </div>
+        <!-- History Table -->
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold">Sit-in Records</h2>
         </div>
         
-        <!-- History Table -->
         <div class="glass p-5 rounded-lg" id="history-table-container">
             <div class="overflow-x-auto">
                 <table class="w-full" id="history-table">
@@ -412,119 +443,5 @@ $avgMinutes = floor(($avgDuration % 3600) / 60);
             </div>
         </div>
     </div>
-    
-    <script>
-        // Print functionality
-        document.getElementById('printBtn').addEventListener('click', function() {
-            window.print();
-        });
-        
-        // PDF Export
-        document.getElementById('pdfBtn').addEventListener('click', function() {
-            const { jsPDF } = window.jspdf;
-            
-            // Create timestamp for filename
-            const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-            const filename = `sitin-history-${timestamp}.pdf`;
-            
-            // Get table container and create PDF
-            const element = document.getElementById('history-table-container');
-            
-            // Create PDF with larger paper size
-            const doc = new jsPDF('l', 'mm', 'a3');
-            
-            // Add title and date
-            doc.setFontSize(18);
-            doc.text('Sit-in Lab History Report', 14, 15);
-            
-            doc.setFontSize(10);
-            doc.text(`Generated on: ${new Date().toLocaleString()}`, 14, 22);
-            
-            // Add filter information if present
-            let yPosition = 29;
-            if (<?php echo $dateFilter ? 'true' : 'false' ?>) {
-                doc.text(`Date Filter: <?php echo $dateFilter ?>`, 14, yPosition);
-                yPosition += 6;
-            }
-            
-            if (<?php echo $dateRangeStart && $dateRangeEnd ? 'true' : 'false' ?>) {
-                doc.text(`Date Range: <?php echo $dateRangeStart ?> to <?php echo $dateRangeEnd ?>`, 14, yPosition);
-                yPosition += 6;
-            }
-            
-            if (<?php echo $labFilter ? 'true' : 'false' ?>) {
-                doc.text(`Laboratory: <?php echo $labFilter ?>`, 14, yPosition);
-                yPosition += 6;
-            }
-            
-            if (<?php echo $purposeFilter ? 'true' : 'false' ?>) {
-                doc.text(`Purpose: <?php echo $purposeFilter ?>`, 14, yPosition);
-                yPosition += 6;
-            }
-            
-            // Add statistics
-            doc.text(`Total Sessions: <?php echo $stats['total_sessions'] ?>`, 14, yPosition);
-            yPosition += 6;
-            doc.text(`Unique Students: <?php echo $stats['unique_users'] ?>`, 14, yPosition);
-            yPosition += 6;
-            doc.text(`Average Duration: <?php echo $avgHours ?>h <?php echo $avgMinutes ?>m`, 14, yPosition);
-            yPosition += 10;
-            
-            // Use html2canvas to capture the table
-            html2canvas(element, {
-                scale: 2,
-                backgroundColor: null
-            }).then(canvas => {
-                const imgData = canvas.toDataURL('image/png');
-                const imgWidth = 280;
-                const imgHeight = canvas.height * imgWidth / canvas.width;
-                
-                doc.addImage(imgData, 'PNG', 10, yPosition, imgWidth, imgHeight);
-                doc.save(filename);
-            });
-        });
-        
-        // Excel Export
-        document.getElementById('excelBtn').addEventListener('click', function() {
-            // Create timestamp for filename
-            const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-            const filename = `sitin-history-${timestamp}.xlsx`;
-            
-            // Get the table
-            const table = document.getElementById('history-table');
-            
-            // Prepare data array
-            const data = [];
-            
-            // Add header row
-            const headerRow = [];
-            const headers = table.querySelectorAll('thead th');
-            headers.forEach(header => {
-                headerRow.push(header.innerText);
-            });
-            data.push(headerRow);
-            
-            // Add data rows
-            const rows = table.querySelectorAll('tbody tr');
-            rows.forEach(row => {
-                if (!row.querySelector('td[colspan]')) { // Skip "no records" row
-                    const rowData = [];
-                    const cells = row.querySelectorAll('td');
-                    cells.forEach(cell => {
-                        rowData.push(cell.innerText.replace(/\s+/g, ' ').trim());
-                    });
-                    data.push(rowData);
-                }
-            });
-            
-            // Create workbook and worksheet
-            const ws = XLSX.utils.aoa_to_sheet(data);
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, 'Sit-in History');
-            
-            // Generate Excel file
-            XLSX.writeFile(wb, filename);
-        });
-    </script>
 </body>
 </html>

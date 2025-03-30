@@ -126,11 +126,11 @@ $dailyResult = $conn->query($dailyQuery);
 // Process data for charts
 $labLabels = [];
 $labCounts = [];
-$labColors = ["#8b5cf6", "#3b82f6", "#06b6d4", "#10b981", "#f59e0b"];
+$labColors = ["#B8977E", "#C9B8A7", "#D6C7BA", "#E3D6CD", "#F0E5E0"];
 
 $purposeLabels = [];
 $purposeCounts = [];
-$purposeColors = ["#ec4899", "#f43f5e", "#8b5cf6", "#3b82f6", "#06b6d4", "#10b981"];
+$purposeColors = ["#B8977E", "#C9B8A7", "#D6C7BA", "#E3D6CD", "#F0E5E0", "#F7F2EF"];
 
 if($labUsageResult && $labUsageResult->num_rows > 0) {
     $i = 0;
@@ -179,20 +179,21 @@ $avgMinutes = $avgSessionMinutes % 60;
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" width="device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="js/particles.js" defer></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
                         primary: {
-                            light: '#e0c3fc',
-                            DEFAULT: '#b2a6cc',
-                            dark: '#8ec5fc',
+                            light: '#ff9a9e',
+                            DEFAULT: '#fad0c4',
+                            dark: '#fbc2eb',
                         }
                     },
                     fontFamily: {
@@ -205,58 +206,207 @@ $avgMinutes = $avgSessionMinutes % 60;
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
         
+        /* Update body background with gradient */
         body {
-            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
-            background-attachment: fixed;
+            background: linear-gradient(135deg, #000000, #1a1a1a);
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            font-family: 'Roboto', sans-serif;
+            overflow-x: hidden;
+            position: relative;
         }
         
-        /* Glassmorphism */
         .glass {
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(237, 238, 245, 0.37);
         }
 
-        /* Custom scrollbar */
+        .dash-card {
+            background: linear-gradient(135deg, rgba(29, 59, 42, 0.4), rgba(60, 46, 38, 0.4));
+            border: 1px solid rgba(166, 124, 82, 0.2);
+        }
+
+        .dash-card:hover {
+            background: linear-gradient(135deg, rgba(29, 59, 42, 0.6), rgba(60, 46, 38, 0.6));
+            border: 1px solid rgba(166, 124, 82, 0.3);
+        }
+
+        .header {
+            background: linear-gradient(to right, rgba(29, 59, 42, 0.9), rgba(60, 46, 38, 0.9));
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(166, 124, 82, 0.2);
+        }
+
+        .sidebar {
+            background: rgba(0, 0, 0, 0.8);
+            border-right: 1px solid rgba(166, 124, 82, 0.2);
+        }
+
+        /* Update text colors */
+        .text-gray-600 {
+            color: rgba(247, 241, 236, 0.8) !important;
+        }
+
+        .text-gray-800 {
+            color: rgba(255, 255, 255, 0.9) !important;
+        }
+
+        /* Custom scrollbar for dark theme */
         ::-webkit-scrollbar {
             width: 8px;
         }
         
         ::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.3);
         }
         
         ::-webkit-scrollbar-thumb {
-            background: rgba(178, 166, 204, 0.5);
+            background: rgba(166, 124, 82, 0.5);
             border-radius: 4px;
         }
         
         ::-webkit-scrollbar-thumb:hover {
-            background: rgba(178, 166, 204, 0.8);
+            background: rgba(166, 124, 82, 0.7);
         }
-        
-        /* Dashboard card hover effects */
-        .dash-card {
+
+        /* Updated announcement button styles */
+        #toggleAnnouncementForm {
+            background: linear-gradient(135deg, #1D3B2A, #3C2E26) !important;
+            color: #A67C52 !important;
+            border: 1px solid rgba(166, 124, 82, 0.3) !important;
+        }
+
+        #toggleAnnouncementForm:hover {
+            background: linear-gradient(135deg, #3C2E26, #1D3B2A) !important;
+            border-color: rgba(166, 124, 82, 0.5) !important;
+            transform: translateY(-1px);
+        }
+
+        /* Announcement form buttons */
+        .announcement-btn {
+            background: linear-gradient(135deg, #1D3B2A, #3C2E26) !important;
+            color: #A67C52 !important;
+            border: 1px solid rgba(166, 124, 82, 0.3) !important;
             transition: all 0.3s ease;
         }
+
+        .announcement-btn:hover {
+            background: linear-gradient(135deg, #3C2E26, #1D3B2A) !important;
+            border-color: rgba(166, 124, 82, 0.5) !important;
+            transform: translateY(-1px);
+        }
+
+        /* Cancel button style */
+        .announcement-btn-cancel {
+            background: rgba(60, 46, 38, 0.8) !important;
+            color: #A67C52 !important;
+            border: 1px solid rgba(166, 124, 82, 0.3) !important;
+        }
+
+        .announcement-btn-cancel:hover {
+            background: rgba(60, 46, 38, 1) !important;
+            border-color: rgba(166, 124, 82, 0.5) !important;
+        }
+
+        /* Icon container styles */
+        .icon-container {
+            background: linear-gradient(135deg, rgba(29, 59, 42, 0.4), rgba(60, 46, 38, 0.4));
+            color: #A67C52;
+            border: 1px solid rgba(166, 124, 82, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .icon-container:hover {
+            background: linear-gradient(135deg, rgba(29, 59, 42, 0.6), rgba(60, 46, 38, 0.6));
+            border-color: rgba(166, 124, 82, 0.4);
+        }
+
+        /* Icon colors */
+        .icon-primary {
+            color: #A67C52 !important;
+        }
+
+        /* Sidebar icon colors */
+        .sidebar i {
+            color: #A67C52;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar a:hover i {
+            color: #5A6B4D;
+        }
+
+        /* Stats text colors */
+        .stat-number {
+            color: #ffffff !important;
+            font-weight: 600;
+        }
+
+        .stat-label {
+            color: rgba(166, 124, 82, 0.8) !important;
+        }
+
+        /* Update announcement stat numbers and labels */
+        .stats-value {
+            color: #ffffff !important;
+            font-weight: 600;
+        }
+
+        .stats-label {
+            color: rgba(166, 124, 82, 0.8) !important;
+            font-size: 0.875rem;
+        }
+        /* Add this style for detail links */
+        .detail-link {
+            color: rgb(180, 176, 213) !important;
+            transition: all 0.3s ease;
+        }
+
+        .detail-link:hover {
+            opacity: 0.8;
+            transform: translateX(2px);
+        }
+
+
+        /* Update specific h4 classes */
+        .glass h4,
+        .dash-card h4,
+        .modal h4 {
+            color: rgb(180, 176, 213) !important;
+        }
+
+        /* Sidebar link colors */
+        .sidebar ul li a span {
+            color: #FFFFFF !important;
+        }
         
-        .dash-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 32px 0 rgba(31, 38, 135, 0.5);
+        .sidebar ul li a.active span {
+            color: #ffffff !important;
+        }
+
+        .sidebar .text-sm.opacity-75 {
+            color: #FFFFFF !important;
+        }
+
+        .sidebar .font-semibold {
+            color: #FFFFFF !important;
         }
     </style>
 </head>
 <body class="font-sans text-gray-800 min-h-screen">
     <!-- Header -->
-    <div class="fixed top-0 left-0 right-0 bg-gradient-to-r from-[rgba(178,166,204,0.7)] to-[rgba(217,230,255,0.7)] backdrop-blur-lg z-50 border-b border-white/20 py-2 px-6">
+    <div class="fixed top-0 left-0 right-0 header z-50 border-b border-white/20 py-2 px-6">
         <h1 class="text-xl md:text-2xl font-bold text-center">Administrator Dashboard</h1>
     </div>
     
     <!-- Sidebar -->
-    <div class="fixed top-0 left-0 bottom-0 w-64 glass border-r border-white/20 pt-16 z-40 overflow-y-auto">
+    <div class="fixed top-0 left-0 bottom-0 w-64 sidebar border-r border-white/20 pt-16 z-40 overflow-y-auto no-print">
         <div class="flex flex-col items-center p-5 mb-5 border-b border-white/30">
             <img src="images/admin_icon.jpg" alt="Admin Profile" class="w-20 h-20 rounded-full object-cover border-3 border-white/50 mb-3">
             <div class="font-semibold text-center"><?php echo $_SESSION['username']; ?></div>
@@ -274,16 +424,13 @@ $avgMinutes = $avgSessionMinutes % 60;
                 <i class="fas fa-chair w-6"></i> <span>Current Sit-In</span>
             </a></li>
             <li class="mb-1"><a href="manage_history.php" class="flex items-center py-2 px-4 rounded hover:bg-white/20 transition-colors">
-                <i class="fas fa-history w-6"></i> <span>History Sit-In</span>
+                <i class="fas fa-history w-6"></i> <span>Sit-In Records</span>
+            </a></li>
+            <li class="mb-1"><a href="reports.php" class="flex items-center py-2 px-4 rounded hover:bg-white/20 transition-colors">
+                <i class="fas fa-chart-bar w-6"></i> <span>Reports</span>
             </a></li>
             <li class="mb-1"><a href="manage_users.php" class="flex items-center py-2 px-4 rounded hover:bg-white/20 transition-colors">
                 <i class="fas fa-users w-6"></i> <span>Manage Users</span>
-            </a></li>
-            <li class="mb-1"><a href="manage_feedback.php" class="flex items-center py-2 px-4 rounded hover:bg-white/20 transition-colors">
-                <i class="fas fa-comment w-6"></i> <span>Feedback</span>
-            </a></li>
-            <li class="mb-1"><a href="#" class="flex items-center py-2 px-4 rounded hover:bg-white/20 transition-colors">
-                <i class="fas fa-cog w-6"></i> <span>Settings</span>
             </a></li>
             <li class="mb-1"><a href="logout.php" class="flex items-center py-2 px-4 rounded hover:bg-white/20 transition-colors">
                 <i class="fas fa-sign-out-alt w-6"></i> <span>Log Out</span>
@@ -292,12 +439,12 @@ $avgMinutes = $avgSessionMinutes % 60;
     </div>
     
     <!-- Main Content -->
-    <div class="ml-64 p-6" style="padding-top: 70px; margin-top: 20%;">
+    <div class="ml-64 p-6 pt-20">
 
         <div class="glass p-5 rounded-lg dash-card mb-6">
             <div class="flex items-center">
-                <div class="rounded-full bg-primary-light/50 p-4 mr-4">
-                    <i class="fas fa-user-shield text-primary-dark text-xl"></i>
+                <div class="rounded-full icon-container p-4 mr-4">
+                    <i class="fas fa-user-shield icon-primary text-xl"></i>
                 </div>
                 <div>
                     <h2 class="text-xl font-bold">Welcome back, <?php echo $_SESSION['username']; ?>!</h2>
@@ -312,16 +459,16 @@ $avgMinutes = $avgSessionMinutes % 60;
             <!-- Active Sit-ins Card -->
             <div class="glass p-5 rounded-lg dash-card">
                 <div class="flex items-center">
-                    <div class="rounded-full bg-blue-100/50 p-4 mr-4">
-                        <i class="fas fa-chair text-blue-600 text-xl"></i>
+                    <div class="rounded-full icon-container p-4 mr-4">
+                        <i class="fas fa-chair icon-primary text-xl"></i>
                     </div>
                     <div>
-                        <p class="text-xl font-bold"><?php echo $activeSitinCount; ?></p>
-                        <p class="text-sm text-gray-600">Active Sit-ins</p>
+                        <p class="text-xl font-bold stat-number"><?php echo $activeSitinCount; ?></p>
+                        <p class="text-sm stat-label">Active Sit-ins</p>
                     </div>
                 </div>
                 <div class="mt-4 pt-3 border-t border-white/30">
-                    <a href="manage_currsitin.php" class="text-primary-dark hover:text-primary transition-colors text-sm flex items-center">
+                    <a href="manage_currsitin.php" class="detail-link flex items-center">
                         <span>View Details</span>
                         <i class="fas fa-arrow-right ml-1 text-xs"></i>
                     </a>
@@ -331,16 +478,16 @@ $avgMinutes = $avgSessionMinutes % 60;
             <!-- Today's Sit-ins Card -->
             <div class="glass p-5 rounded-lg dash-card">
                 <div class="flex items-center">
-                    <div class="rounded-full bg-green-100/50 p-4 mr-4">
-                        <i class="fas fa-calendar-day text-green-600 text-xl"></i>
+                    <div class="rounded-full icon-container p-4 mr-4">
+                        <i class="fas fa-calendar-day icon-primary text-xl"></i>
                     </div>
                     <div>
-                        <p class="text-xl font-bold"><?php echo $todaySitinCount; ?></p>
-                        <p class="text-sm text-gray-600">Today's Sit-ins</p>
+                        <p class="text-xl font-bold stat-number"><?php echo $todaySitinCount; ?></p>
+                        <p class="text-sm stat-label">Today's Sit-ins</p>
                     </div>
                 </div>
                 <div class="mt-4 pt-3 border-t border-white/30">
-                    <a href="manage_historysitin.php" class="text-primary-dark hover:text-primary transition-colors text-sm flex items-center">
+                    <a href="manage_historysitin.php" class="detail-link flex items-center">
                         <span>View Details</span>
                         <i class="fas fa-arrow-right ml-1 text-xs"></i>
                     </a>
@@ -350,16 +497,16 @@ $avgMinutes = $avgSessionMinutes % 60;
             <!-- Total Users Card -->
             <div class="glass p-5 rounded-lg dash-card">
                 <div class="flex items-center">
-                    <div class="rounded-full bg-purple-100/50 p-4 mr-4">
-                        <i class="fas fa-users text-purple-600 text-xl"></i>
+                    <div class="rounded-full icon-container p-4 mr-4">
+                        <i class="fas fa-users icon-primary text-xl"></i>
                     </div>
                     <div>
-                        <p class="text-xl font-bold"><?php echo $userCount; ?></p>
-                        <p class="text-sm text-gray-600">Total Users</p>
+                        <p class="text-xl font-bold stat-number"><?php echo $userCount; ?></p>
+                        <p class="text-sm stat-label">Total Users</p>
                     </div>
                 </div>
                 <div class="mt-4 pt-3 border-t border-white/30">
-                    <a href="manage_users.php" class="text-primary-dark hover:text-primary transition-colors text-sm flex items-center">
+                    <a href="manage_users.php" class="detail-link flex items-center">
                         <span>Manage Users</span>
                         <i class="fas fa-arrow-right ml-1 text-xs"></i>
                     </a>
@@ -369,16 +516,16 @@ $avgMinutes = $avgSessionMinutes % 60;
             <!-- Announcements Card -->
             <div class="glass p-5 rounded-lg dash-card">
                 <div class="flex items-center">
-                    <div class="rounded-full bg-yellow-100/50 p-4 mr-4">
-                        <i class="fas fa-bullhorn text-yellow-600 text-xl"></i>
+                    <div class="rounded-full icon-container p-4 mr-4">
+                        <i class="fas fa-bullhorn icon-primary text-xl"></i>
                     </div>
                     <div>
-                        <p class="text-xl font-bold"><?php echo $announcementCount; ?></p>
-                        <p class="text-sm text-gray-600">Announcements</p>
+                        <p class="text-xl font-bold stat-number"><?php echo $announcementCount; ?></p>
+                        <p class="text-sm stat-label">Announcements</p>
                     </div>
                 </div>
                 <div class="mt-4 pt-3 border-t border-white/30">
-                    <a href="manage_announcements.php" class="text-primary-dark hover:text-primary transition-colors text-sm flex items-center">
+                    <a href="manage_announcements.php" class="detail-link flex items-center">
                         <span>Manage Announcements</span>
                         <i class="fas fa-arrow-right ml-1 text-xs"></i>
                     </a>
@@ -468,7 +615,7 @@ $avgMinutes = $avgSessionMinutes % 60;
                 </div>
                 
                 <div class="mt-4 text-center">
-                    <a href="manage_historysitin.php" class="text-primary-dark hover:text-primary transition-colors text-sm inline-flex items-center">
+                    <a href="manage_historysitin.php" class="detail-link flex items-center justify-center">
                         <span>View Detailed Reports</span>
                         <i class="fas fa-arrow-right ml-1 text-xs"></i>
                     </a>
@@ -481,7 +628,7 @@ $avgMinutes = $avgSessionMinutes % 60;
                         <i class="fas fa-bullhorn text-primary-dark mr-2"></i> Announcements
                     </h3>
                     
-                    <button id="toggleAnnouncementForm" class="bg-primary-dark hover:bg-primary text-white py-1 px-3 rounded-lg transition-colors text-sm inline-flex items-center">
+                    <button id="toggleAnnouncementForm" class="py-1 px-3 rounded-lg transition-colors">
                         <i class="fas fa-plus mr-1"></i> New
                     </button>
                 </div>
@@ -507,11 +654,11 @@ $avgMinutes = $avgSessionMinutes % 60;
                         
                         <div class="flex justify-end gap-2">
                             <button type="button" id="cancelAnnouncementBtn" 
-                                    class="py-1 px-3 rounded-lg transition-colors bg-gray-200/50 hover:bg-gray-300/50 text-gray-700">
+                                    class="py-1 px-3 rounded-lg transition-colors announcement-btn-cancel">
                                 Cancel
                             </button>
                             <button type="submit" name="add_announcement" 
-                                    class="py-1 px-3 rounded-lg transition-colors bg-primary-dark hover:bg-primary text-white">
+                                    class="py-1 px-3 rounded-lg transition-colors announcement-btn">
                                 Post Announcement
                             </button>
                         </div>
@@ -533,9 +680,15 @@ $avgMinutes = $avgSessionMinutes % 60;
                             <div class="p-4 rounded-lg bg-white/20 hover:bg-white/30 transition-colors">
                                 <div class="flex justify-between items-start mb-2">
                                     <h4 class="font-semibold text-primary-dark"><?php echo htmlspecialchars($announcement['title']); ?></h4>
-                                    <div class="flex items-center">
-                                        <span class="text-xs text-gray-600 mr-2"><?php echo date('M j, Y', strtotime($announcement['date'])); ?></span>
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs text-gray-600"><?php echo date('M j, Y', strtotime($announcement['date'])); ?></span>
                                         
+                                        <!-- Edit button -->
+                                        <button onclick="openEditModal(<?php echo $announcement['id']; ?>, '<?php echo addslashes($announcement['title']); ?>', '<?php echo addslashes($announcement['content']); ?>')" 
+                                                class="text-blue-500 hover:text-blue-700 transition-colors">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+
                                         <!-- Delete announcement button -->
                                         <form method="POST" action="" class="inline" onsubmit="return confirm('Are you sure you want to delete this announcement?');">
                                             <input type="hidden" name="announcement_id" value="<?php echo $announcement['id']; ?>">
@@ -573,7 +726,7 @@ $avgMinutes = $avgSessionMinutes % 60;
                     if($totalAnnouncements > 3): 
                     ?>
                         <div class="mt-4 text-center">
-                            <a href="#" id="viewMoreAnnouncements" class="text-primary-dark hover:text-primary transition-colors text-sm inline-flex items-center">
+                            <a href="#" id="viewMoreAnnouncements" class="detail-link flex items-center justify-center">
                                 <span>View All Announcements</span>
                                 <i class="fas fa-arrow-right ml-1 text-xs"></i>
                             </a>
@@ -589,11 +742,44 @@ $avgMinutes = $avgSessionMinutes % 60;
         </div>
     </div>
 
+    <!-- Edit Announcement Modal -->
+    <div id="editModal" class="fixed inset-0 hidden items-center justify-center z-50">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+        <div class="relative glass p-6 rounded-lg w-full max-w-md">
+            <h3 class="text-xl font-bold mb-4 text-white/90">Edit Announcement</h3>
+            <form action="edit_announcement.php" method="POST" id="editForm">
+                <input type="hidden" name="announcement_id" id="edit_announcement_id">
+                
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-white/90 mb-1">Title</label>
+                    <input type="text" id="edit_title" name="title" 
+                        class="w-full px-3 py-2 rounded-lg bg-white/20 border border-white/30 focus:outline-none focus:border-white/50"
+                        required>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-white/90 mb-1">Content</label>
+                    <textarea id="edit_content" name="content" rows="4" 
+                        class="w-full px-3 py-2 rounded-lg bg-white/20 border border-white/30 focus:outline-none focus:border-white/50"
+                        required></textarea>
+                </div>
+                
+                <div class="flex justify-end gap-2">
+                    <button type="button" onclick="closeEditModal()" 
+                        class="px-4 py-2 rounded-lg bg-gray-500/50 hover:bg-gray-600/50 text-white transition-colors">
+                        Cancel
+                    </button>
+                    <button type="submit" 
+                        class="px-4 py-2 rounded-lg bg-blue-500/50 hover:bg-blue-600/50 text-white transition-colors">
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-
-
-        <!-- Add this script at the end of your file, before </body> -->
-        <script>
+    <!-- Add this script at the end of your file, before </body> -->
+    <script>
         // Toggle announcement form visibility
         document.getElementById('toggleAnnouncementForm').addEventListener('click', function() {
             const form = document.getElementById('announcementForm');
@@ -698,6 +884,19 @@ $avgMinutes = $avgSessionMinutes % 60;
                     `;
                 });
         });
+
+        function openEditModal(id, title, content) {
+            document.getElementById('editModal').classList.remove('hidden');
+            document.getElementById('editModal').classList.add('flex');
+            document.getElementById('edit_announcement_id').value = id;
+            document.getElementById('edit_title').value = title;
+            document.getElementById('edit_content').value = content;
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').classList.add('hidden');
+            document.getElementById('editModal').classList.remove('flex');
+        }
     </script>
 
     <!-- Add Chart.js library before your closing body tag -->
@@ -713,15 +912,23 @@ $avgMinutes = $avgSessionMinutes % 60;
                     datasets: [{
                         data: <?php echo json_encode($labCounts); ?>,
                         backgroundColor: <?php echo json_encode($labColors); ?>,
-                        borderWidth: 1,
-                        borderColor: 'rgba(255, 255, 255, 0.2)',
-                        hoverOffset: 4
+                        borderWidth: 2,
+                        borderColor: 'rgba(166, 124, 82, 0.3)',
+                        hoverBorderColor: 'rgba(166, 124, 82, 0.5)',
+                        hoverOffset: 6
                     }]
                 },
                 options: {
                     plugins: {
                         legend: {
                             display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleColor: '#B8977E',
+                            bodyColor: 'rgba(184, 151, 126, 0.8)',
+                            borderColor: '#A67C52',
+                            borderWidth: 1
                         }
                     },
                     cutout: '70%',
@@ -730,7 +937,7 @@ $avgMinutes = $avgSessionMinutes % 60;
                 }
             });
             
-            // Purpose Chart
+            // Purpose Chart with updated colors
             const purposeCtx = document.getElementById('purposeChart').getContext('2d');
             new Chart(purposeCtx, {
                 type: 'doughnut',
@@ -739,15 +946,23 @@ $avgMinutes = $avgSessionMinutes % 60;
                     datasets: [{
                         data: <?php echo json_encode($purposeCounts); ?>,
                         backgroundColor: <?php echo json_encode($purposeColors); ?>,
-                        borderWidth: 1,
-                        borderColor: 'rgba(255, 255, 255, 0.2)',
-                        hoverOffset: 4
+                        borderWidth: 2,
+                        borderColor: 'rgba(166, 124, 82, 0.3)',
+                        hoverBorderColor: 'rgba(166, 124, 82, 0.5)',
+                        hoverOffset: 6
                     }]
                 },
                 options: {
                     plugins: {
                         legend: {
                             display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleColor: '#B8977E',
+                            bodyColor: 'rgba(184, 151, 126, 0.8)',
+                            borderColor: '#A67C52',
+                            borderWidth: 1
                         }
                     },
                     cutout: '70%',
@@ -755,8 +970,8 @@ $avgMinutes = $avgSessionMinutes % 60;
                     maintainAspectRatio: true
                 }
             });
-            
-            // Weekly Trend Chart
+
+            // Weekly Trend Chart with updated colors
             const weeklyCtx = document.getElementById('weeklyChart').getContext('2d');
             new Chart(weeklyCtx, {
                 type: 'bar',
@@ -765,9 +980,10 @@ $avgMinutes = $avgSessionMinutes % 60;
                     datasets: [{
                         label: 'Daily Sit-ins',
                         data: <?php echo json_encode($dailyCounts); ?>,
-                        backgroundColor: 'rgba(142, 197, 252, 0.6)',
-                        borderColor: 'rgba(142, 197, 252, 1)',
-                        borderWidth: 1
+                        backgroundColor: 'rgba(166, 124, 82, 0.4)',
+                        borderColor: '#A67C52',
+                        borderWidth: 1,
+                        hoverBackgroundColor: 'rgba(166, 124, 82, 0.6)'
                     }]
                 },
                 options: {
@@ -775,27 +991,40 @@ $avgMinutes = $avgSessionMinutes % 60;
                         y: {
                             beginAtZero: true,
                             grid: {
-                                display: true,
-                                color: 'rgba(255, 255, 255, 0.1)'
+                                color: 'rgba(166, 124, 82, 0.1)',
+                                borderColor: 'rgba(166, 124, 82, 0.2)'
+                            },
+                            ticks: {
+                                color: 'rgba(166, 124, 82, 0.8)'
                             }
                         },
                         x: {
                             grid: {
                                 display: false
+                            },
+                            ticks: {
+                                color: 'rgba(166, 124, 82, 0.8)'
                             }
                         }
                     },
                     plugins: {
                         legend: {
                             display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleColor: '#B8977E',
+                            bodyColor: 'rgba(184, 151, 126, 0.8)',
+                            borderColor: '#A67C52',
+                            borderWidth: 1
                         }
                     },
                     responsive: true,
                     maintainAspectRatio: false
                 }
             });
-            
-            // Average Duration Chart
+
+            // Average Duration Chart with updated colors
             const durationCtx = document.getElementById('durationChart').getContext('2d');
             new Chart(durationCtx, {
                 type: 'doughnut',
@@ -804,8 +1033,8 @@ $avgMinutes = $avgSessionMinutes % 60;
                     datasets: [{
                         data: [<?php echo $avgSessionMinutes; ?>, 180 - <?php echo $avgSessionMinutes; ?>],
                         backgroundColor: [
-                            'rgba(224, 195, 252, 0.8)',
-                            'rgba(255, 255, 255, 0.1)'
+                            '#A67C52',
+                            'rgba(60, 46, 38, 0.2)'
                         ],
                         borderWidth: 0,
                         hoverOffset: 0,

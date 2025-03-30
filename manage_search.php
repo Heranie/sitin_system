@@ -150,33 +150,206 @@ if(isset($_POST['new_sitin'])) {
             }
         }
     </script>
+    <script src="js/particles.js" defer></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
-        
+        /* Dark theme background and base styles */
         body {
-            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
-            background-attachment: fixed;
+            background: #000000;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            font-family: 'Roboto', sans-serif;
+            overflow-x: hidden;
+            position: relative;
         }
-        
-        /* Glassmorphism */
-        .glass {
-            background: rgba(255, 255, 255, 0.25);
+
+        /* Header style */
+        .header {
+            background: linear-gradient(to right, rgba(29, 59, 42, 0.9), rgba(60, 46, 38, 0.9));
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(166, 124, 82, 0.2);
+        }
+
+        /* Fix header text color - override any other styles */
+        .header h1.text-center {
+            color: #FFFFFF !important;
+        }
+
+        /* Remove any conflicting color declarations */
+        h1, h2 {
+            color: unset !important;
+        }
+
+        /* Sidebar style */
+        .sidebar {
+            background: rgba(0, 0, 0, 0.8);
+            border-right: 1px solid rgba(166, 124, 82, 0.2);
+        }
+
+        /* Sidebar icon colors */
+        .sidebar i {
+            color: #A67C52;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar a:hover i {
+            color: #5A6B4D;
+        }
+
+        .sidebar a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .sidebar a.active {
+            background: rgba(255, 255, 255, 0.3);
+            color: #A67C52;
+        }
+
+        /* Update sidebar link colors */
+        .sidebar ul li a {
+            color: #B4B0D5 !important;
+        }
+
+        .sidebar ul li a:hover {
+            color: #B4B0D5 !important;
+        }
+
+        .sidebar ul li a.active {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .sidebar ul li a.active i,
+        .sidebar ul li a.active span {
+            color: #A67C52 !important;
+        }
+
+        /* Sidebar link hover colors */
+        .sidebar ul li a span {
+            color: #FFFFFF !important;
+        }
+        
+        .sidebar ul li a.active span {
+            color: #ffffff !important;
+        }
+
+        /* Fix admin username and role color */
+        .sidebar .text-sm.opacity-75,
+        .sidebar .font-semibold {
+            color: #FFFFFF !important;
+        }
+
+        /* Sidebar styles */
+        .sidebar ul li a span {
+            color: #FFFFFF !important;
+        }
+
+        .sidebar ul li a.active span {
+            color: #ffffff !important;
+        }
+
+        .sidebar .text-primary-dark {
+            color: #ffffff !important;
+        }
+
+        /* Update heading and button colors */
+        button[type="submit"],
+        .bg-primary-dark {
+            background: linear-gradient(135deg, #1D3B2A, #3C2E26) !important;
+            color: #A67C52 !important;
+            border: 1px solid rgba(166, 124, 82, 0.3) !important;
+            transition: all 0.3s ease;
+        }
+
+        button[type="submit"]:hover,
+        .bg-primary-dark:hover {
+            background: linear-gradient(135deg, #3C2E26, #1D3B2A) !important;
+            border-color: rgba(166, 124, 82, 0.5) !important;
+            transform: translateY(-1px);
+        }
+
+        /* Glass and card styles */
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(237, 238, 245, 0.37);
+        }
+
+        /* Form inputs and selects */
+        input, select {
+            background: rgba(255, 255, 255, 0.1) !important;
+            border: 1px solid rgba(166, 124, 82, 0.2) !important;
+            color: rgba(255, 255, 255, 0.9) !important;
+        }
+
+        input::placeholder {
+            color: rgba(166, 124, 82, 0.6) !important;
+        }
+
+        /* Labels and text */
+        label, .text-gray-600 {
+            color: rgba(166, 124, 82, 0.8) !important;
+        }
+
+        .text-gray-800, p {
+            color: rgba(255, 255, 255, 0.9) !important;
+        }
+
+        /* Student info card */
+        .font-semibold {
+            color: rgba(255, 255, 255, 0.9) !important;
+        }
+
+        /* Info messages */
+        .bg-amber-100\/80 {
+            background: rgba(29, 59, 42, 0.4) !important;
+            border: 1px solid rgba(166, 124, 82, 0.2);
+        }
+
+        .text-amber-800 {
+            color: #A67C52 !important;
+        }
+
+        /* Success and error messages */
+        .bg-green-100\/80 {
+            background: rgba(29, 59, 42, 0.4) !important;
+        }
+
+        .bg-red-100\/80 {
+            background: rgba(60, 46, 38, 0.4) !important;
+        }
+
+        .text-green-800, .text-red-800 {
+            color: #A67C52 !important;
+        }
+
+        /* Icons */
+        i {
+            color: #A67C52;
+        }
+
+        /* Border colors */
+        .border-white\/30 {
+            border-color: rgba(166, 124, 82, 0.2) !important;
+        }
+
+        /* Update Search Student heading color */
+        .glass h2.text-xl {
+            color: #FFFFFF !important;
         }
     </style>
 </head>
 <body class="font-sans text-gray-800 min-h-screen">
     <!-- Header -->
-    <div class="fixed top-0 left-0 right-0 bg-gradient-to-r from-[rgba(178,166,204,0.7)] to-[rgba(217,230,255,0.7)] backdrop-blur-lg z-50 border-b border-white/20 py-3 px-6">
-        <h1 class="text-xl md:text-2xl font-bold text-center">Search Students</h1>
+    <div class="fixed top-0 left-0 right-0 bg-gradient-to-r from-[rgba(29,59,42,0.9)] to-[rgba(60,46,38,0.9)] backdrop-blur-lg z-50 border-b border-white/20 py-2 px-6 header">
+        <h1 class="text-xl md:text-2xl font-bold text-center text-white">Search Students</h1>
     </div>
     
     <!-- Sidebar -->
-    <div class="fixed top-0 left-0 bottom-0 w-64 glass border-r border-white/20 pt-16 z-40 overflow-y-auto">
+    <div class="fixed top-0 left-0 bottom-0 w-64 glass border-r border-white/20 pt-16 z-40 overflow-y-auto no-print sidebar">
         <div class="flex flex-col items-center p-5 mb-5 border-b border-white/30">
             <img src="images/admin_icon.jpg" alt="Admin Profile" class="w-20 h-20 rounded-full object-cover border-3 border-white/50 mb-3">
             <div class="font-semibold text-center"><?php echo $_SESSION['username']; ?></div>
@@ -187,23 +360,20 @@ if(isset($_POST['new_sitin'])) {
             <li class="mb-1"><a href="admin_dashboard.php" class="flex items-center py-2 px-4 rounded hover:bg-white/20 transition-colors">
                 <i class="fas fa-tachometer-alt w-6"></i> <span>Dashboard</span>
             </a></li>
-            <li class="mb-1"><a href="manage_search.php" class="flex items-center py-2 px-4 rounded bg-white/30 text-primary-dark font-semibold">
+            <li class="mb-1"><a href="manage_search.php" class="flex items-center py-2 px-4 rounded hover:bg-white/20 transition-colors">
                 <i class="fas fa-search w-6"></i> <span>Search</span>
             </a></li>
             <li class="mb-1"><a href="manage_currsitin.php" class="flex items-center py-2 px-4 rounded hover:bg-white/20 transition-colors">
                 <i class="fas fa-chair w-6"></i> <span>Current Sit-In</span>
             </a></li>
             <li class="mb-1"><a href="manage_history.php" class="flex items-center py-2 px-4 rounded hover:bg-white/20 transition-colors">
-                <i class="fas fa-history w-6"></i> <span>History Sit-In</span>
+                <i class="fas fa-history w-6"></i> <span>Sit-In Records</span>
+            </a></li>
+            <li class="mb-1"><a href="reports.php" class="flex items-center py-2 px-4 rounded hover:bg-white/20 transition-colors">
+                <i class="fas fa-chart-bar w-6"></i> <span>Reports</span>
             </a></li>
             <li class="mb-1"><a href="manage_users.php" class="flex items-center py-2 px-4 rounded hover:bg-white/20 transition-colors">
                 <i class="fas fa-users w-6"></i> <span>Manage Users</span>
-            </a></li>
-            <li class="mb-1"><a href="manage_feedback.php" class="flex items-center py-2 px-4 rounded hover:bg-white/20 transition-colors">
-                <i class="fas fa-comment w-6"></i> <span>Feedback</span>
-            </a></li>
-            <li class="mb-1"><a href="#" class="flex items-center py-2 px-4 rounded hover:bg-white/20 transition-colors">
-                <i class="fas fa-cog w-6"></i> <span>Settings</span>
             </a></li>
             <li class="mb-1"><a href="logout.php" class="flex items-center py-2 px-4 rounded hover:bg-white/20 transition-colors">
                 <i class="fas fa-sign-out-alt w-6"></i> <span>Log Out</span>

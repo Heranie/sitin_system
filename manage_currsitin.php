@@ -87,51 +87,141 @@ if(isset($_POST['checkout']) && isset($_POST['sitin_id'])) {
             }
         }
     </script>
+    <script src="js/particles.js" defer></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
-        
+        /* Base styles */
         body {
-            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
-            background-attachment: fixed;
-        }
-        
-        /* Glassmorphism */
-        .glass {
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            background: #000000;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            font-family: 'Roboto', sans-serif;
+            overflow-x: hidden;
         }
 
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
+        /* Header style */
+        .header {
+            background: linear-gradient(to right, rgba(29, 59, 42, 0.9), rgba(60, 46, 38, 0.9));
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(166, 124, 82, 0.2);
         }
-        
-        ::-webkit-scrollbar-track {
+
+        /* Sidebar style */
+        .sidebar {
+            background: rgba(0, 0, 0, 0.8);
+            border-right: 1px solid rgba(166, 124, 82, 0.2);
+        }
+
+        /* Unified sidebar styles */
+        .sidebar ul li a {
+            color: #FFFFFF !important;
+        }
+
+        .sidebar ul li a i {
+            color: #A67C52 !important;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar ul li a span {
+            color: #FFFFFF !important;
+        }
+
+        .sidebar ul li a.active {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .sidebar ul li a.active span {
+            color: #A67C52 !important;
+        }
+
+        /* Admin text colors */
+        .sidebar .text-sm.opacity-75,
+        .sidebar .font-semibold {
+            color: #FFFFFF !important;
+        }
+
+        /* Container and card styles */
+        .glass {
             background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(237, 238, 245, 0.37);
         }
-        
-        ::-webkit-scrollbar-thumb {
-            background: rgba(178, 166, 204, 0.5);
-            border-radius: 4px;
+
+        /* Icon container */
+        .icon-container {
+            background: linear-gradient(135deg, rgba(29, 59, 42, 0.4), rgba(60, 46, 38, 0.4));
+            color: #A67C52;
+            border: 1px solid rgba(166, 124, 82, 0.2);
+            transition: all 0.3s ease;
         }
-        
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(178, 166, 204, 0.8);
+
+        /* Text colors */
+        .text-gray-600 {
+            color: rgba(166, 124, 82, 0.8) !important;
+        }
+
+        .text-gray-800 {
+            color: #ffffff !important;
+        }
+
+        /* Button styles */
+        .action-btn {
+            background: linear-gradient(135deg, #1D3B2A, #3C2E26) !important;
+            color: #A67C52 !important;
+            border: 1px solid rgba(166, 124, 82, 0.3) !important;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: linear-gradient(135deg, #3C2E26, #1D3B2A) !important;
+            border-color: rgba(166, 124, 82, 0.5) !important;
+            transform: translateY(-1px);
+        }
+
+        /* Table styles */
+        table thead tr {
+            background: rgba(166, 124, 82, 0.1);
+        }
+
+        table tbody tr {
+            border-bottom: 1px solid rgba(166, 124, 82, 0.2);
+        }
+
+        /* Global icon colors */
+        i,
+        .fa-tachometer-alt,
+        .fa-search,
+        .fa-chair,
+        .fa-history,
+        .fa-chart-bar,
+        .fa-users,
+        .fa-sign-out-alt,
+        .fa-check-circle,
+        .fa-exclamation-circle,
+        .fa-info-circle,
+        .fa-times,
+        .fa-mug-hot,
+        .fa-sync-alt,
+        .fa-code,
+        .fa-clock,
+        .icon-primary {
+            color: #A67C52 !important;
+            transition: all 0.3s ease;
         }
     </style>
 </head>
 <body class="font-sans text-gray-800 min-h-screen">
     <!-- Header -->
-    <div class="fixed top-0 left-0 right-0 bg-gradient-to-r from-[rgba(178,166,204,0.7)] to-[rgba(217,230,255,0.7)] backdrop-blur-lg z-50 border-b border-white/20 py-3 px-6">
-        <h1 class="text-xl md:text-2xl font-bold text-center">Current Sit-In Management</h1>
+    <div class="fixed top-0 left-0 right-0 bg-gradient-to-r from-[rgba(29,59,42,0.9)] to-[rgba(60,46,38,0.9)] backdrop-blur-lg z-50 border-b border-white/20 py-2 px-6 header">
+        <h1 class="text-xl md:text-2xl font-bold text-center text-white">Current Sit-In Management</h1>
     </div>
     
     <!-- Sidebar -->
-    <div class="fixed top-0 left-0 bottom-0 w-64 glass border-r border-white/20 pt-16 z-40 overflow-y-auto">
+    <div class="fixed top-0 left-0 bottom-0 w-64 glass border-r border-white/20 pt-16 z-40 overflow-y-auto no-print">
         <div class="flex flex-col items-center p-5 mb-5 border-b border-white/30">
             <img src="images/admin_icon.jpg" alt="Admin Profile" class="w-20 h-20 rounded-full object-cover border-3 border-white/50 mb-3">
             <div class="font-semibold text-center"><?php echo $_SESSION['username']; ?></div>
@@ -145,20 +235,17 @@ if(isset($_POST['checkout']) && isset($_POST['sitin_id'])) {
             <li class="mb-1"><a href="manage_search.php" class="flex items-center py-2 px-4 rounded hover:bg-white/20 transition-colors">
                 <i class="fas fa-search w-6"></i> <span>Search</span>
             </a></li>
-            <li class="mb-1"><a href="manage_currsitin.php" class="flex items-center py-2 px-4 rounded bg-white/30 text-primary-dark font-semibold">
+            <li class="mb-1"><a href="manage_currsitin.php" class="flex items-center py-2 px-4 rounded hover:bg-white/20 transition-colors">
                 <i class="fas fa-chair w-6"></i> <span>Current Sit-In</span>
             </a></li>
             <li class="mb-1"><a href="manage_history.php" class="flex items-center py-2 px-4 rounded hover:bg-white/20 transition-colors">
-                <i class="fas fa-history w-6"></i> <span>Sit-In History</span>
+                <i class="fas fa-history w-6"></i> <span>Sit-In Records</span>
+            </a></li>
+            <li class="mb-1"><a href="reports.php" class="flex items-center py-2 px-4 rounded hover:bg-white/20 transition-colors">
+                <i class="fas fa-chart-bar w-6"></i> <span>Reports</span>
             </a></li>
             <li class="mb-1"><a href="manage_users.php" class="flex items-center py-2 px-4 rounded hover:bg-white/20 transition-colors">
                 <i class="fas fa-users w-6"></i> <span>Manage Users</span>
-            </a></li>
-            <li class="mb-1"><a href="manage_feedback.php" class="flex items-center py-2 px-4 rounded hover:bg-white/20 transition-colors">
-                <i class="fas fa-comment w-6"></i> <span>Feedback</span>
-            </a></li>
-            <li class="mb-1"><a href="#" class="flex items-center py-2 px-4 rounded hover:bg-white/20 transition-colors">
-                <i class="fas fa-cog w-6"></i> <span>Settings</span>
             </a></li>
             <li class="mb-1"><a href="logout.php" class="flex items-center py-2 px-4 rounded hover:bg-white/20 transition-colors">
                 <i class="fas fa-sign-out-alt w-6"></i> <span>Log Out</span>
@@ -167,7 +254,7 @@ if(isset($_POST['checkout']) && isset($_POST['sitin_id'])) {
     </div>
     
     <!-- Main Content -->
-    <div class="ml-64 pt-16 p-6">
+    <div class="ml-64 p-6 pt-20">
         <?php if(isset($_GET['msg']) && $_GET['msg'] == 'success'): ?>
             <div class="mb-6 p-4 rounded-lg bg-green-100/80 text-green-800">
                 <i class="fas fa-check-circle mr-2"></i> Student successfully timeout from sit-in.
@@ -276,8 +363,8 @@ if(isset($_POST['checkout']) && isset($_POST['sitin_id'])) {
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mt-6">
             <div class="glass p-4">
                 <div class="flex items-center">
-                    <div class="rounded-full bg-blue-100/50 p-3 mr-4">
-                        <i class="fas fa-users text-blue-600"></i>
+                    <div class="rounded-full icon-container p-3 mr-4">
+                        <i class="fas fa-users icon-primary"></i>
                     </div>
                     <div>
                         <p class="text-sm text-gray-600">Total Students Today</p>
@@ -295,8 +382,8 @@ if(isset($_POST['checkout']) && isset($_POST['sitin_id'])) {
             
             <div class="glass p-4">
                 <div class="flex items-center">
-                    <div class="rounded-full bg-green-100/50 p-3 mr-4">
-                        <i class="fas fa-chair text-green-600"></i>
+                    <div class="rounded-full icon-container p-3 mr-4">
+                        <i class="fas fa-chair icon-primary"></i>
                     </div>
                     <div>
                         <p class="text-sm text-gray-600">Currently Active</p>
@@ -314,8 +401,8 @@ if(isset($_POST['checkout']) && isset($_POST['sitin_id'])) {
             
             <div class="glass p-4">
                 <div class="flex items-center">
-                    <div class="rounded-full bg-yellow-100/50 p-3 mr-4">
-                        <i class="fas fa-clock text-yellow-600"></i>
+                    <div class="rounded-full icon-container p-3 mr-4">
+                        <i class="fas fa-clock icon-primary"></i>
                     </div>
                     <div>
                         <p class="text-sm text-gray-600">Avg. Session Time</p>
@@ -366,8 +453,8 @@ if(isset($_POST['checkout']) && isset($_POST['sitin_id'])) {
             
             <div class="glass p-4">
                 <div class="flex items-center">
-                    <div class="rounded-full bg-purple-100/50 p-3 mr-4">
-                        <i class="fas fa-code text-purple-600"></i>
+                    <div class="rounded-full icon-container p-3 mr-4">
+                        <i class="fas fa-code icon-primary"></i>
                     </div>
                     <div>
                         <p class="text-sm text-gray-600">Top Purpose</p>
@@ -392,8 +479,6 @@ if(isset($_POST['checkout']) && isset($_POST['sitin_id'])) {
             </div>
         </div>
     </div>
-    
-    // Replace the existing JavaScript section at the bottom of the file:
 
 <script>
     // Live search functionality

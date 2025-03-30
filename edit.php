@@ -121,7 +121,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             overflow-x: hidden;
         }
         .header {
-            background: linear-gradient(to right, rgba(178, 166, 204, 0.8), rgba(217, 230, 255, 0.8));
+            background: linearar-gradient(to right, rgba(29, 59, 42, 0.9), rgba(60, 46, 38, 0.9));
             color: #000;
             padding: 10px;
             text-align: center;
@@ -132,7 +132,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             font-family: 'Roboto', sans-serif;
         }
         .sidebar {
-            background: linear-gradient(to bottom, rgba(217, 230, 255, 0.9), rgba(178, 166, 204, 0.9));
+            background: linear-gradient(to right, rgba(29, 59, 42, 0.9), rgba(60, 46, 38, 0.9));
             width: 250px;
             padding: 15px;
             box-shadow: 2px 0 5px rgba(245, 183, 242, 0.1);

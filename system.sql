@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 26, 2025 at 09:43 PM
+-- Generation Time: Mar 27, 2025 at 05:28 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -66,14 +66,10 @@ INSERT INTO `announcements` (`id`, `title`, `content`, `date`, `created_by`) VAL
 
 CREATE TABLE `feedback` (
   `id` int(11) NOT NULL,
-  `user_id` varchar(100) NOT NULL,
-  `username` varchar(100) NOT NULL,
-  `subject` varchar(255) NOT NULL,
-  `message` text NOT NULL,
-  `status` enum('pending','read','responded') DEFAULT 'pending',
-  `date_submitted` datetime NOT NULL,
-  `admin_response` text DEFAULT NULL,
-  `date_responded` datetime DEFAULT NULL
+  `sitin_id` int(11) NOT NULL,
+  `rating` int(11) NOT NULL,
+  `comments` text DEFAULT NULL,
+  `date_submitted` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -98,7 +94,9 @@ CREATE TABLE `new_sitin` (
 --
 
 INSERT INTO `new_sitin` (`id`, `user_id`, `purpose`, `laboratory`, `date`, `time_in`, `time_out`, `status`) VALUES
-(1, 2, 'Java Programming', '528', '2025-03-27', '04:32:22', '04:34:41', 'completed');
+(1, 2, 'Java Programming', '528', '2025-03-27', '04:32:22', '04:34:41', 'completed'),
+(2, 3, 'C Programming', '524', '2025-03-27', '22:56:23', '22:56:32', 'completed'),
+(3, 3, 'C Programming', '528', '2025-03-27', '22:59:14', '23:00:18', 'completed');
 
 -- --------------------------------------------------------
 
@@ -146,8 +144,9 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `idNo`, `firstName`, `lastName`, `middleName`, `course`, `yearLevel`, `username`, `password`, `profileImage`, `email`, `address`, `created_at`, `session`) VALUES
 (1, '2323232', 'Natasha', 'Dinops', 'G.', 'BS in Information Technology', '3', 'dinops1234', '606363018c087644b6637e1639ba6c16', 'img/default-profile.jpg', 'skibidi@gmail.com', NULL, '2025-03-22 02:26:09', 30),
 (2, '11111111', 'Just B', 'Paraiso', 'I.', 'BS in Information Technology', '1st Year', 'justb123', '9793f1b0b87de320269dba17645c9da9', 'uploads/justb123_1742610757.jpg', 'justb123@gmail.com', NULL, '2025-03-22 02:28:11', 25),
-(3, '22551133', 'Alexus', 'Sagaral', 'O.', 'BS in Computer Science', '3', 'alex123', 'b75bd008d5fecb1f50cf026532e8ae67', 'img/default-profile.jpg', 'alex@gmail.com', NULL, '2025-03-26 15:36:53', 30),
-(4, '99887744', 'Jeff', 'Monreal', 'M.', 'BS in Computer Science', '3', 'jeff123', 'dc2af307c55523ce42701dbe43880d35', 'img/default-profile.jpg', 'jeff@gmail.com', NULL, '2025-03-26 16:59:33', 30);
+(3, '22551133', 'Alexus', 'Sagaral', 'O.', 'BS in Computer Science', '3', 'alex123', 'b75bd008d5fecb1f50cf026532e8ae67', 'img/default-profile.jpg', 'alex@gmail.com', NULL, '2025-03-26 15:36:53', 28),
+(4, '99887744', 'Jeff', 'Monreal', 'M.', 'BS in Computer Science', '3', 'jeff123', 'dc2af307c55523ce42701dbe43880d35', 'img/default-profile.jpg', 'jeff@gmail.com', NULL, '2025-03-26 16:59:33', 30),
+(5, '20952503', 'Vince', 'Cabunilas', 'N.', 'BS in Information Technology', '3', 'Vince', '202cb962ac59075b964b07152d234b70', 'img/default-profile.jpg', 'vincebryant42@gmail.com', NULL, '2025-03-27 15:20:09', 30);
 
 --
 -- Indexes for dumped tables
@@ -170,7 +169,8 @@ ALTER TABLE `announcements`
 -- Indexes for table `feedback`
 --
 ALTER TABLE `feedback`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `sitin_id` (`sitin_id`);
 
 --
 -- Indexes for table `new_sitin`
@@ -219,7 +219,7 @@ ALTER TABLE `feedback`
 -- AUTO_INCREMENT for table `new_sitin`
 --
 ALTER TABLE `new_sitin`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `reservations`
@@ -231,11 +231,17 @@ ALTER TABLE `reservations`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `feedback`
+--
+ALTER TABLE `feedback`
+  ADD CONSTRAINT `feedback_ibfk_1` FOREIGN KEY (`sitin_id`) REFERENCES `new_sitin` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `new_sitin`
